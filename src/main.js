@@ -23,7 +23,7 @@ const tasks = generateTasks(TASK_COUNT);
 
 const today = new Date().toLocaleDateString();
 
-let filterCounter = [
+const filterCounter = [
   tasks.length,
   tasks.filter((task) => task.dueDate instanceof Date && task.dueDate < Date.now()).length,
   tasks.filter((task) => task.dueDate !== null && task.dueDate.toLocaleDateString() === today).length,

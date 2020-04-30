@@ -115,6 +115,7 @@ export default class BoardController {
 
     let showingTasksCount = SHOWING_TASKS_COUNT_ON_START;
 
+    renderTasks(taskListElement, tasks.slice(0, showingTasksCount));
     renderLoadMoreButton();
 
     this._sortComponent.setSortTypeChangeHandler((sortType) => {
@@ -124,11 +125,7 @@ export default class BoardController {
 
       taskListElement.innerHTML = ``;
 
-      sortedTasks.slice(0, showingTasksCount)
-        .forEach((task) => {
-          renderTask(taskListElement, task);
-        });
-
+      renderTasks(taskListElement, sortedTasks);
       renderLoadMoreButton();
     });
   }

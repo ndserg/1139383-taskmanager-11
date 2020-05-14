@@ -1,8 +1,7 @@
 import BoardComponent from "./components/board.js";
 import BoardController from "./controllers/board.js";
-import FilterComponent from "./components/filter.js";
+import FilterController from "./controllers/filter.js";
 import SiteMenuComponent from "./components/site-menu.js";
-import {generateFilters} from "./mock/filter.js";
 import {generateTasks} from "./mock/task.js";
 import {render, RenderPosition} from "./utils/render.js";
 import TasksModel from "./models/tasks.js";
@@ -11,25 +10,14 @@ const TASK_COUNT = 20;
 
 const siteMainElement = document.querySelector(`.main`);
 const siteHeaderElement = siteMainElement.querySelector(`.main__control`);
+render(siteHeaderElement, new SiteMenuComponent(), RenderPosition.BEFOREEND);
 
 const tasks = generateTasks(TASK_COUNT);
 const tasksModel = new TasksModel();
 tasksModel.setTasks(tasks);
-const today = new Date().toLocaleDateString();
 
-const filterCounter = [
-  tasks.length,
-  tasks.filter((task) => task.dueDate instanceof Date && task.dueDate < Date.now()).length,
-  tasks.filter((task) => task.dueDate !== null && task.dueDate.toLocaleDateString() === today).length,
-  tasks.filter((task) => task.isFavorite === true).length,
-  tasks.filter((task) => Object.values(task.repeatingDays).includes(true)).length,
-  tasks.filter((task) => task.isArchive === true).length,
-];
-
-const filters = generateFilters(filterCounter);
-
-render(siteHeaderElement, new SiteMenuComponent(), RenderPosition.BEFOREEND);
-render(siteMainElement, new FilterComponent(filters), RenderPosition.BEFOREEND);
+const filterController = new FilterController(siteMainElement, tasksModel);
+filterController.render();
 
 const boardComponent = new BoardComponent();
 const boardController = new BoardController(boardComponent, tasksModel);
